@@ -28,6 +28,11 @@ de la [Iniciativa de Datos e Inteligencia Artificial (IDIA)](https://idia.uchile
 
 DashAI se ejecutará en un computador de Google.
 
+> [!IMPORTANT]
+> En [el cuaderno de Colab](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb), marca **guardar_en_drive**
+> antes de encender DashAI si quieres conservar tus sesiones. Si lo ejecutas
+> en tu computador, conserva la carpeta `.dashai`.
+
 1. **Descarga la [guía de ejercicios](https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai/raw/refs/heads/main/DashAI_Guia.html)**
    y abre el archivo `DashAI_Guia.html` en tu navegador. Esta guía explica qué hacer
    dentro de DashAI.
@@ -43,11 +48,6 @@ DashAI se ejecutará en un computador de Google.
 La preparación puede demorar entre 10 y 20 minutos la primera vez. Calcula unos
 20 minutos más por ejercicio. Si una celda falla, consulta la sección **5. Si algo
 no funciona** del cuaderno.
-
-> [!IMPORTANT]
-> En [el cuaderno de Colab](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb), marca **guardar_en_drive**
-> antes de encender DashAI si quieres conservar tus sesiones. Si lo ejecutas
-> en tu computador, conserva la carpeta `.dashai`.
 
 ## Ejecutarlo en tu computador
 
@@ -65,7 +65,8 @@ Solo necesitas descargar el material e instalar las dependencias la primera vez.
 
 ### Windows
 
-Con Git y uv instalados, abre **PowerShell**.
+Con Git y uv instalados, abre **Inicio**, busca **PowerShell** y ábrelo.
+Copia cada comando y pulsa **Enter** para ejecutarlo.
 
 **1. Descarga el material y entra en su carpeta:**
 
@@ -83,6 +84,9 @@ $env:PYTHONUTF8 = "1"
 
 **2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
 
+Si ya tienes `breast_cancer.csv`, ejecuta la sincronización y omite solo el
+comando que ejecuta `scripts/generar_datos.py`. Después continúa con el paso 3.
+
 ```powershell
 uv sync --locked --extra llm
 uv run --extra llm python scripts/generar_datos.py
@@ -96,7 +100,11 @@ uv run --extra llm python -m DashAI --no-browser --local-path .dashai
 
 ### macOS
 
-Con Git y uv instalados, abre **Terminal**.
+Estas instrucciones se comprobaron en Mac con Apple Silicon. Si tu Mac usa Intel,
+la instalación no está comprobada: puedes usar [el cuaderno de Colab](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb).
+
+Con Git y uv instalados, busca **Terminal** con Spotlight y ábrelo.
+Copia cada comando y pulsa **Enter** para ejecutarlo.
 
 **1. Descarga el material y entra en su carpeta:**
 
@@ -106,6 +114,9 @@ cd jornadas_hcuch_tutorial_dashai
 ```
 
 **2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
+
+Si ya tienes `breast_cancer.csv`, ejecuta la sincronización y omite solo el
+comando que ejecuta `scripts/generar_datos.py`. Después continúa con el paso 3.
 
 ```sh
 uv sync --locked --extra llm
@@ -120,7 +131,8 @@ uv run --extra llm python -m DashAI --no-browser --local-path .dashai
 
 ### Linux
 
-Con Git y uv instalados, abre **Terminal**.
+Con Git y uv instalados, abre **Terminal** desde el menú de aplicaciones.
+Copia cada comando y pulsa **Enter** para ejecutarlo.
 
 **1. Descarga el material y entra en su carpeta:**
 
@@ -130,6 +142,9 @@ cd jornadas_hcuch_tutorial_dashai
 ```
 
 **2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
+
+Si ya tienes `breast_cancer.csv`, ejecuta la sincronización y omite solo el
+comando que ejecuta `scripts/generar_datos.py`. Después continúa con el paso 3.
 
 ```sh
 uv sync --locked --extra llm
@@ -150,7 +165,8 @@ a DashAI en el primer ejercicio. Si ya existe, puedes usarlo; el comando no lo
 sobrescribe. El extra `llm` instala el soporte para el modelo de lenguaje del
 segundo ejercicio.
 
-Deja abierta la terminal y espera a que termine de iniciar. Después abre
+Deja abierta la terminal. Cuando aparezca `Uvicorn running on http://127.0.0.1:8000`,
+DashAI está listo. Abre
 <http://127.0.0.1:8000/app/> en tu navegador y sigue la
 [guía de ejercicios](https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai/raw/refs/heads/main/DashAI_Guia.html).
 Puedes saltarte sus instrucciones de preparación y descarga de datos en Colab:

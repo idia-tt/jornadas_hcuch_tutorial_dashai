@@ -40,16 +40,21 @@ blockquote{border-left:4px solid var(--a);margin:1em 0;padding:4px 16px;backgrou
 <a href="DashAI_Guia.html">la guía HTML</a> son los mismos: trabajas en el navegador,
 pero los datos y sesiones quedan en tu computador.</p>
 <h2 id="1-preparar-el-computador">1. Preparar el computador</h2>
-<p>Usa Windows 10/11 x64, Linux x64 o macOS con Apple Silicon. Para Mac Intel,
-la disponibilidad de wheels de las dependencias debe comprobarse por separado.
+<p>Usa Windows 10/11 x64, Linux x64 o macOS con Apple Silicon. La instalación
+en Mac Intel no está comprobada. Si ese es tu computador, puedes hacer los
+ejercicios con <a href="https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb">el cuaderno de Colab</a>.
 Se recomienda disponer de 8 GB de RAM y al menos 10 GB de disco libre; los modelos
 de lenguaje pueden necesitar bastante más. Internet es necesario para instalar
 y descargar modelos. Python 3.12 lo instala uv automáticamente.</p>
 <p>Instala <a href="https://git-scm.com/downloads">Git</a> y luego uv:</p>
 <p><strong>Windows — PowerShell</strong></p>
+<p>Abre <strong>Inicio</strong>, busca <strong>PowerShell</strong> y ábrelo. Copia el comando del recuadro
+y pulsa <strong>Enter</strong> para ejecutarlo.</p>
 <pre><code class="language-powershell">powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
 </code></pre>
 <p><strong>macOS/Linux — Terminal</strong></p>
+<p>En macOS, busca <strong>Terminal</strong> con Spotlight; en Linux, ábrelo desde el menú de
+aplicaciones. Copia el comando del recuadro y pulsa <strong>Enter</strong> para ejecutarlo.</p>
 <pre><code class="language-sh">curl -LsSf https://astral.sh/uv/install.sh | sh
 </code></pre>
 <p>Cierra y vuelve a abrir la terminal. Comprueba <code>git --version</code> y <code>uv --version</code>.
@@ -65,13 +70,17 @@ uv sync --locked
 es exclusivo de este proyecto. La instalación principal usa CPU y permite
 hacer el ejemplo de clasificación sin GPU.</p>
 <h2 id="2-encender-y-generar-los-datos">2. Encender y generar los datos</h2>
+<p>Solo necesitas generar <code>breast_cancer.csv</code> una vez. Si ya existe, omite el primer
+comando y continúa con el que inicia DashAI. Si lo ejecutaste y aparece
+<code>FileExistsError</code>, puedes continuar usando el CSV que ya tienes.</p>
 <pre><code class="language-sh">uv run python scripts/generar_datos.py
 uv run python -m DashAI --no-browser --local-path .dashai
 </code></pre>
 <p>El primer comando crea <code>breast_cancer.csv</code> en la carpeta del repo: 569 filas,
 30 características y la columna <code>diagnosis</code>. No sobrescribe archivos existentes.
 Súbelo desde la guía de ejercicios; no necesitas ejecutar su paso de Colab.</p>
-<p>Espera que el servidor termine de iniciar y abre <a href="http://127.0.0.1:8000/app/">http://127.0.0.1:8000/app/</a>.
+<p>Cuando la terminal muestre <code>Uvicorn running on http://127.0.0.1:8000</code>,
+DashAI está listo. Abre <a href="http://127.0.0.1:8000/app/">http://127.0.0.1:8000/app/</a>.
 Mantén abierta la terminal. Para detener DashAI pulsa <strong>Ctrl+C</strong> y espera que
 termine. Para volver a iniciar, repite el segundo comando desde la misma carpeta.</p>
 <p>Las sesiones y datasets permanecen en <code>.dashai</code>, incluso después de apagar.
@@ -90,43 +99,99 @@ llama-cpp; macOS fija 0.3.29 siguiendo la restricción de DashAI 0.10.0.</p>
 <p>Sigue el ejemplo B de la guía. La primera descarga puede tardar varios minutos;
 en CPU las respuestas serán más lentas. Empieza por el modelo pequeño de la guía.</p>
 <h2 id="4-gpu-entorno-independiente">4. GPU: entorno independiente</h2>
-<p>Esta sección es opcional y requiere hardware compatible. Mantiene intactos el
-entorno CPU y su lockfile. El entorno GPU instala la misma versión de DashAI,
-pero sus dependencias se resuelven por separado y no quedan fijadas por <code>uv.lock</code>.</p>
-<pre><code class="language-sh">uv venv --python 3.12 .venv-gpu
-</code></pre>
-<p>En los comandos de esta sección, sustituye <code>PYTHON_GPU</code> por:</p>
+<p>Esta sección es opcional y está dirigida a quienes ya configuran herramientas
+de desarrollo. Si no tienes los requisitos o alguna comprobación falla,
+continúa con <a href="#3-ejemplo-b-modelos-de-lenguaje-con-cpu">la instalación CPU de la sección 3</a>.</p>
+<p>El entorno GPU mantiene intactos el entorno CPU y su lockfile. Instala la misma
+versión de DashAI, pero sus dependencias se resuelven por separado y no quedan
+fijadas por <code>uv.lock</code>. Ejecuta los comandos desde la carpeta del tutorial.
+No ejecutes dos servidores sobre la misma carpeta de datos.</p>
+<h3 id="windows--nvidia">Windows — NVIDIA</h3>
+<p>Antes de empezar, instala estos requisitos:</p>
 <ul>
-<li>Windows PowerShell: <code>.venv-gpu/Scripts/python.exe</code></li>
-<li>macOS/Linux: <code>.venv-gpu/bin/python</code></li>
+<li>Un <a href="https://www.nvidia.com/en-us/drivers/">controlador NVIDIA</a> compatible con tu
+tarjeta y <a href="https://developer.nvidia.com/cuda-12-8-0-download-archive">CUDA Toolkit 12.8</a>.</li>
+<li><a href="https://cmake.org/download/">CMake</a>, disponible en el PATH.</li>
+<li><a href="https://visualstudio.microsoft.com/visual-cpp-build-tools/">Visual Studio Build Tools para C++</a>,
+con las herramientas de desarrollo de escritorio con C++.</li>
 </ul>
-<p>No escribas literalmente <code>PYTHON_GPU</code>. Instala la base:</p>
-<pre><code class="language-sh">uv pip install --python PYTHON_GPU dashai==0.10.0
+<p>Abre <strong>Developer PowerShell for Visual Studio</strong> desde Inicio, entra en la carpeta
+del tutorial y comprueba los requisitos:</p>
+<pre><code class="language-powershell">nvidia-smi
+nvcc --version
+cmake --version
+cl
 </code></pre>
-<h3 id="nvidia--windowslinux">NVIDIA — Windows/Linux</h3>
-<p>Instala un controlador compatible y CUDA Toolkit 12.8; comprueba <code>nvidia-smi</code>
-y <code>nvcc --version</code>. Para compilar llama-cpp necesitas CMake y un compilador C++:
-Visual Studio Build Tools en Windows (terminal de desarrollo) o GCC/Clang en Linux.</p>
-<pre><code class="language-sh">uv pip install --python PYTHON_GPU torch torchvision --index-url https://download.pytorch.org/whl/cu128 --reinstall
-uv pip install --python PYTHON_GPU llama-cpp-python --no-binary llama-cpp-python -C cmake.args=-DGGML_CUDA=on
+<p><code>nvidia-smi</code> debe reconocer tu tarjeta; <code>nvcc --version</code> debe indicar CUDA 12.8.
+Los otros comandos deben mostrar la versión de CMake y del compilador de Microsoft.
+Si algún comando no se encuentra, revisa su instalación antes de continuar.</p>
+<pre><code class="language-powershell">uv venv --python 3.12 .venv-gpu
+uv pip install --python .venv-gpu/Scripts/python.exe dashai==0.10.0
+uv pip install --python .venv-gpu/Scripts/python.exe torch torchvision --index-url https://download.pytorch.org/whl/cu128 --reinstall
+uv pip install --python .venv-gpu/Scripts/python.exe llama-cpp-python --no-binary llama-cpp-python -C cmake.args=-DGGML_CUDA=on
 </code></pre>
-<p>Comprueba que <code>PYTHON_GPU -c &quot;import torch; print(torch.cuda.is_available())&quot;</code>
-muestre <code>True</code>. NVIDIA en macOS no está cubierta.</p>
-<h3 id="apple-silicon--macos">Apple Silicon — macOS</h3>
-<p>Usa terminal y Python arm64, sin Rosetta. Instala las herramientas de Xcode con
-<code>xcode-select --install</code>. Con CMake disponible, compila llama-cpp con Metal:</p>
-<pre><code class="language-sh">uv pip install --python PYTHON_GPU llama-cpp-python==0.3.29 --no-binary llama-cpp-python -C cmake.args=-DGGML_METAL=on
+<p>Comprueba la aceleración e inicia DashAI:</p>
+<pre><code class="language-powershell">.venv-gpu/Scripts/python.exe -c &quot;import torch; print(torch.cuda.is_available())&quot;
+.venv-gpu/Scripts/python.exe -c &quot;import llama_cpp; print(llama_cpp.llama_supports_gpu_offload())&quot;
+$env:PYTHONUTF8 = &quot;1&quot;
+.venv-gpu/Scripts/python.exe -m DashAI --no-browser --local-path .dashai
 </code></pre>
-<p>Comprueba <code>PYTHON_GPU -c &quot;import torch; print(torch.backends.mps.is_available())&quot;</code>.
-MPS es la aceleración de PyTorch; llama-cpp utiliza Metal por separado.</p>
-<h3 id="verificar-e-iniciar">Verificar e iniciar</h3>
-<pre><code class="language-sh">PYTHON_GPU -c &quot;import llama_cpp; print(llama_cpp.llama_supports_gpu_offload())&quot;
-PYTHON_GPU -m DashAI --no-browser --local-path .dashai
+<p>Las dos comprobaciones deben mostrar <code>True</code>. Si alguna muestra <code>False</code>, usa el
+entorno CPU mientras revisas la instalación GPU.</p>
+<h3 id="macos--apple-silicon">macOS — Apple Silicon</h3>
+<p>Usa terminal y Python arm64, sin Rosetta. Instala las
+<a href="https://developer.apple.com/xcode/resources/">herramientas de Xcode</a> y
+<a href="https://cmake.org/download/">CMake</a>:</p>
+<pre><code class="language-sh">xcode-select --install
 </code></pre>
-<p>La primera comprobación debe mostrar <code>True</code>. En los parámetros del modelo GGUF,
-configura las capas GPU (<code>n_gpu_layers</code>) si están disponibles y revisa el registro
-para confirmar la descarga de capas a GPU. Tener PyTorch acelerado no basta para
-acelerar un modelo GGUF. No ejecutes dos servidores sobre la misma carpeta.
+<p>Si las herramientas ya están instaladas, no necesitas instalarlas de nuevo.
+Comprueba que los siguientes comandos muestren la versión de cada herramienta:</p>
+<pre><code class="language-sh">clang --version
+cmake --version
+</code></pre>
+<p>Prepara el entorno y compila llama-cpp con Metal:</p>
+<pre><code class="language-sh">uv venv --python 3.12 .venv-gpu
+uv pip install --python .venv-gpu/bin/python dashai==0.10.0
+uv pip install --python .venv-gpu/bin/python llama-cpp-python==0.3.29 --no-binary llama-cpp-python -C cmake.args=-DGGML_METAL=on
+</code></pre>
+<p>Comprueba la aceleración e inicia DashAI:</p>
+<pre><code class="language-sh">.venv-gpu/bin/python -c &quot;import torch; print(torch.backends.mps.is_available())&quot;
+.venv-gpu/bin/python -c &quot;import llama_cpp; print(llama_cpp.llama_supports_gpu_offload())&quot;
+.venv-gpu/bin/python -m DashAI --no-browser --local-path .dashai
+</code></pre>
+<p>Las dos comprobaciones deben mostrar <code>True</code>. MPS es la aceleración de PyTorch;
+llama-cpp utiliza Metal por separado. Si alguna comprobación falla, puedes seguir
+con el entorno CPU de la sección 3.</p>
+<h3 id="linux--nvidia">Linux — NVIDIA</h3>
+<p>Necesitas un <a href="https://www.nvidia.com/en-us/drivers/">controlador NVIDIA</a> compatible
+con tu tarjeta, <a href="https://developer.nvidia.com/cuda-12-8-0-download-archive">CUDA Toolkit 12.8</a>,
+<a href="https://cmake.org/download/">CMake</a> y GCC o Clang. Instala el compilador con el
+gestor de paquetes de tu distribución y comprueba los requisitos:</p>
+<pre><code class="language-sh">nvidia-smi
+nvcc --version
+cmake --version
+gcc --version
+</code></pre>
+<p>Si usas Clang, ejecuta <code>clang --version</code> en lugar de <code>gcc --version</code>.
+<code>nvidia-smi</code> debe reconocer tu tarjeta; <code>nvcc --version</code> debe indicar CUDA 12.8.
+CMake y el compilador deben mostrar su versión. Si algún comando falla, resuelve
+su instalación antes de continuar o usa el entorno CPU de la sección 3.</p>
+<pre><code class="language-sh">uv venv --python 3.12 .venv-gpu
+uv pip install --python .venv-gpu/bin/python dashai==0.10.0
+uv pip install --python .venv-gpu/bin/python torch torchvision --index-url https://download.pytorch.org/whl/cu128 --reinstall
+uv pip install --python .venv-gpu/bin/python llama-cpp-python --no-binary llama-cpp-python -C cmake.args=-DGGML_CUDA=on
+</code></pre>
+<p>Comprueba la aceleración e inicia DashAI:</p>
+<pre><code class="language-sh">.venv-gpu/bin/python -c &quot;import torch; print(torch.cuda.is_available())&quot;
+.venv-gpu/bin/python -c &quot;import llama_cpp; print(llama_cpp.llama_supports_gpu_offload())&quot;
+.venv-gpu/bin/python -m DashAI --no-browser --local-path .dashai
+</code></pre>
+<p>Las dos comprobaciones deben mostrar <code>True</code>. Si alguna muestra <code>False</code>, usa el
+entorno CPU mientras revisas la instalación GPU.</p>
+<h3 id="confirmar-el-uso-de-la-gpu-en-dashai">Confirmar el uso de la GPU en DashAI</h3>
+<p>En los parámetros del modelo GGUF, configura las capas GPU (<code>n_gpu_layers</code>) si
+están disponibles y revisa el registro para confirmar que se asignaron capas
+a la GPU. Tener PyTorch acelerado no basta para acelerar un modelo GGUF.
 Estas recetas requieren validación en tu hardware; la CI solo comprueba CPU.</p>
 <h2 id="5-si-algo-falla">5. Si algo falla</h2>
 <ul>
