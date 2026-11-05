@@ -48,21 +48,49 @@ cómo instalar Git y uv, y qué hacer si algo falla. **Si todavía no tienes esa
 herramientas, empieza por esa guía.** Git permite descargar este repositorio y
 uv prepara el entorno de Python con los programas que necesita el tutorial.
 
-Con Git y uv instalados, abre **PowerShell** en Windows o **Terminal** en
-macOS/Linux. Copia y ejecuta los comandos de cada bloque en orden.
+Elige tu sistema y sigue sus pasos. Copia los comandos de cada bloque en orden.
+Solo necesitas descargar el material e instalar las dependencias la primera vez.
 
-**1. Descarga el material y entra en su carpeta.** Solo hace falta hacerlo una vez:
+### Windows
 
-```sh
+Con Git y uv instalados, abre **PowerShell**.
+
+**1. Descarga el material y entra en su carpeta:**
+
+```powershell
 git clone https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai.git
 cd jornadas_hcuch_tutorial_dashai
 ```
 
-En Windows, ejecuta además este comando en la misma ventana para evitar errores
-con los caracteres del registro de DashAI:
+En esa misma ventana, configura UTF-8 para evitar errores con los caracteres
+del registro de DashAI:
 
 ```powershell
 $env:PYTHONUTF8 = "1"
+```
+
+**2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
+
+```powershell
+uv sync --locked --extra llm
+uv run --extra llm python scripts/generar_datos.py
+```
+
+**3. Inicia DashAI:**
+
+```powershell
+uv run --extra llm python -m DashAI --no-browser --local-path .dashai
+```
+
+### macOS
+
+Con Git y uv instalados, abre **Terminal**.
+
+**1. Descarga el material y entra en su carpeta:**
+
+```sh
+git clone https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai.git
+cd jornadas_hcuch_tutorial_dashai
 ```
 
 **2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
@@ -72,17 +100,43 @@ uv sync --locked --extra llm
 uv run --extra llm python scripts/generar_datos.py
 ```
 
-La instalación puede tardar varios minutos. El segundo comando crea
-`breast_cancer.csv` en la carpeta del tutorial: ese es el archivo que subirás a
-DashAI en el primer ejercicio. Si ya existe, puedes usarlo; el comando no lo
-sobrescribe. El extra `llm` instala el soporte para el modelo de lenguaje del
-segundo ejercicio.
+**3. Inicia DashAI:**
+
+```sh
+uv run --extra llm python -m DashAI --no-browser --local-path .dashai
+```
+
+### Linux
+
+Con Git y uv instalados, abre **Terminal**.
+
+**1. Descarga el material y entra en su carpeta:**
+
+```sh
+git clone https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai.git
+cd jornadas_hcuch_tutorial_dashai
+```
+
+**2. Instala lo necesario para los dos ejercicios y genera el archivo de datos:**
+
+```sh
+uv sync --locked --extra llm
+uv run --extra llm python scripts/generar_datos.py
+```
 
 **3. Inicia DashAI:**
 
 ```sh
 uv run --extra llm python -m DashAI --no-browser --local-path .dashai
 ```
+
+### Abrir DashAI y seguir los ejercicios
+
+La instalación puede tardar varios minutos. El comando de generación de datos
+crea `breast_cancer.csv` en la carpeta del tutorial: ese es el archivo que subirás
+a DashAI en el primer ejercicio. Si ya existe, puedes usarlo; el comando no lo
+sobrescribe. El extra `llm` instala el soporte para el modelo de lenguaje del
+segundo ejercicio.
 
 Deja abierta la terminal y espera a que termine de iniciar. Después abre
 <http://127.0.0.1:8000/app/> en tu navegador y sigue la
@@ -93,7 +147,7 @@ ya tienes DashAI funcionando y el CSV en tu computador.
 Para apagarlo, vuelve a la terminal y pulsa **Ctrl+C**. Tus sesiones y datos
 quedan en la carpeta `.dashai`; consérvala si quieres continuar otro día. Para
 volver a usar DashAI, abre una terminal en la carpeta del tutorial y repite el
-comando del paso 3; en Windows, repite también el ajuste de UTF-8.
+comando del paso 3 de tu sistema; en Windows, repite también el ajuste de UTF-8.
 
 Esta instalación funciona con el procesador del computador (CPU). El segundo
 ejercicio puede responder más lento sin GPU. La guía local incluye una
