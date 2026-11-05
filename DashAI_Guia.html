@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guía de ejercicios de DashAI</title><style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--ln:#d8d8d8;--code:#f1f1f1;--a:#1a5fb4}
+@media (prefers-color-scheme:dark){:root{--bg:#161616;--fg:#e8e8e8;--mut:#aaa;--ln:#3a3a3a;--code:#262626;--a:#7fb2f0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:44rem;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;line-height:1.25;margin:1.2em 0 .4em}
+h2{font-size:1.4rem;margin:2em 0 .5em;padding-top:.6em;border-top:1px solid var(--ln)}
+h3{font-size:1.15rem;margin:1.6em 0 .4em}
+a{color:var(--a)}
+code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.92em;word-break:break-word}
+li{margin:.3em 0}
+img{max-width:100%;height:auto}
+nav{background:var(--code);border-radius:8px;padding:8px 16px;margin:1em 0}
+nav ol{margin:.3em 0;padding-left:1.4em}
+pre.mermaid{background:#fff;color:#1a1a1a;padding:12px;margin:12px 0;border-radius:8px;overflow-x:auto}
+table.logos td{padding:10px 12px!important}
+table.logos img{width:100%!important;height:auto!important}
+table.logos td:nth-child(1){width:38%}table.logos td:nth-child(1) img{max-width:270px}
+table.logos td:nth-child(2){width:28%}table.logos td:nth-child(2) img{max-width:183px}
+table.logos td:nth-child(3){width:34%}table.logos td:nth-child(3) img{max-width:175px;margin-left:auto}
+@media (max-width:30rem){body{font-size:16px}}
+</style></head>
+<body><main>
+<table class="logos" style="width:100%;background:#fff;border-radius:8px;border-collapse:separate"><tr><td style="padding:14px 24px;text-align:left;vertical-align:middle"><a href="https://idia.uchile.cl/" target="_blank" rel="noopener" title="IDIA, Iniciativa de Datos e Inteligencia Artificial" style="justify-self:start"><img src="https://idia.uchile.cl/wp-content/uploads/2026/10/logos_logo_idia_horizontal_morado.png" alt="IDIA, Iniciativa de Datos e Inteligencia Artificial, Universidad de Chile" height="64" style="display:block"></a></td><td style="padding:14px 24px;text-align:center;vertical-align:middle"><a href="https://www.dash-ai.com/" target="_blank" rel="noopener" title="Sitio de DashAI"><img src="https://raw.githubusercontent.com/DashAISoftware/DashAI/production/docs/static/img/dashai-logo.svg" alt="DashAI" width="183" height="51" style="display:block"></a></td><td style="padding:14px 24px;text-align:right;vertical-align:middle"><a href="https://dcc.uchile.cl/" target="_blank" rel="noopener" title="Departamento de Ciencias de la Computación, Universidad de Chile" style="justify-self:end"><img src="https://raw.githubusercontent.com/DashAISoftware/DashAI/production/docs/static/img/institutions/dcc-logo.png" alt="DCC, Departamento de Ciencias de la Computación, Universidad de Chile" height="96" style="display:block"></a></td></tr></table>
+<p>También puedes <a href="docs/dashai-local.md">preparar DashAI en tu computador</a>. En modo local, genera <code>breast_cancer.csv</code> con <code>uv run python scripts/generar_datos.py</code> y abre <code>http://127.0.0.1:8000/app/</code>. Las referencias a preparación y descarga en Colab solo aplican a esa alternativa. Para apagar localmente usa Ctrl+C; tus sesiones permanecen en <code>.dashai</code>.</p>
+<h1>Guía de ejercicios de DashAI: clasificación con una tabla y conversación con un modelo de lenguaje</h1>
+<p><a href="https://www.linkedin.com/in/pablo-badilla-torrealba/">Pablo Badilla</a><br>Tech Lead Oficina de Proyectos<br><a href="https://idia.uchile.cl/">Iniciativa de Datos e Inteligencia Artificial</a><br><a href="https://ingenieria.uchile.cl/">Facultad de Ciencias Físicas y Matemáticas</a><br><a href="https://uchile.cl/">Universidad de Chile</a></p>
+<p><strong>Lo que necesitas:</strong> haber dejado DashAI funcionando con el <a href="https://colab.research.google.com/">cuaderno de Colab</a> (su sección 2, Preparación), y un navegador. Cada ejemplo toma unos 20 minutos.</p>
+<nav aria-label='Contenido'><b>Contenido</b><ol><li><a href='#s1'>1. ¿Qué es DashAI?</a></li><li><a href='#s2'>2. Aprendizaje automático, en simple</a></li><li><a href='#s3'>3. Ejemplo A: clasificación con una tabla</a></li><li><a href='#s4'>4. Ejemplo B: generación de texto con un modelo de lenguaje</a></li><li><a href='#s5'>5. Si algo no funciona</a></li><li><a href='#s6'>6. Glosario</a></li><li><a href='#s7'>7. Para seguir aprendiendo</a></li></ol></nav><h2 id="s1">1. ¿Qué es DashAI?</h2>
+<p><a href="https://dash-ai.com/">DashAI</a> es un programa con interfaz gráfica para entrenar, evaluar y usar modelos de aprendizaje automático haciendo clic, sin escribir código. Lo dejaremos funcionando dentro de Google Colab y lo veremos dentro del propio cuaderno de Colab. Puedes consultar su <a href="https://docs.dash-ai.com/">documentación</a> y su <a href="https://github.com/DashAISoftware/DashAI">código</a>.</p>
+<div role="note" style="background:#e8f1fb;color:#1a1a1a;border-left:6px solid #2f6db5;padding:10px 16px;border-radius:6px;margin:8px 0"><b>Antes de empezar</b><br>Abre el cuaderno de Colab y sigue la sección 2 (Preparación) hasta ver DashAI en el recuadro del Paso 4. Después vuelve aquí. Conviene tener esta guía y el cuaderno lado a lado.</div>
+<h2 id="s2">2. Aprendizaje automático, en simple</h2>
+<p>En un programa tradicional, una persona escribe las reglas. En el aprendizaje automático se hace al revés: se le dan al computador muchos ejemplos y él busca por sí mismo los patrones que mejor los explican. El resultado de esa búsqueda se llama <strong>modelo</strong>.</p>
+<h3>Aprendizaje supervisado</h3>
+<p>Es el caso en que los ejemplos vienen con la respuesta correcta. Imagina una tabla con una fila por persona, varias columnas con sus características y una última columna con el resultado que nos interesa. El modelo revisa muchas filas y aprende qué patrones se asocian a cada resultado. Después se le muestra una fila nueva, sin el resultado, y propone uno. Puede equivocarse.</p>
+<p>Hay tres palabras que se repiten mucho:</p>
+<ul>
+<li><strong>Entrenar:</strong> dejar que el modelo ajuste sus patrones con los ejemplos.</li>
+<li><strong>Evaluar:</strong> probarlo con filas que no se usaron para ajustarlo, como un examen con preguntas distintas a las que se estudiaron. Para eso, antes de entrenar, los datos se reparten en tres grupos: <em>entrenamiento</em> (con el que aprende), <em>validación</em> (con el que se comparan variantes del modelo) y <em>prueba</em> (el examen final).</li>
+<li><strong>Predecir:</strong> usarlo con casos nuevos.</li>
+</ul>
+<pre class="mermaid">flowchart LR
+    A["Ejemplos con la<br>respuesta conocida"] --> B["Entrenamiento:<br>el modelo ajusta sus patrones"]
+    B --> C["Modelo entrenado"]
+    D["Caso nuevo<br>(sin respuesta)"] --> C
+    C --> E["Predicción"]</pre><pre class="mermaid">flowchart TD
+    A["Aprendizaje automático"] --> B["Aprendizaje supervisado:<br>ejemplos con respuesta"]
+    A --> F["Modelos de lenguaje (LLM):<br>se entrenan con mucho texto"]
+    B --> C["Clasificación:<br>la respuesta es una categoría"]
+    B --> D["Regresión:<br>la respuesta es un número"]
+    C --> G["Ejemplo A:<br>tabla de datos"]
+    F --> H["Ejemplo B:<br>conversación"]
+    D -.-> I["No la veremos"]</pre><h3>Clasificación</h3>
+<p>Es un tipo de aprendizaje supervisado donde la respuesta es una <strong>categoría</strong>: &quot;sí / no&quot;, &quot;tipo A / B / C&quot;, &quot;riesgo alto / medio / bajo&quot;. Cuando la respuesta es un número (una edad, un valor de laboratorio) se habla de regresión, que no veremos aquí.</p>
+<h3>Modelos de lenguaje (LLM)</h3>
+<p>Un modelo de lenguaje, como el que está detrás de ChatGPT, funciona de otra manera. Se entrena con enormes cantidades de texto para predecir qué fragmento de palabra viene a continuación y después se ajusta para seguir instrucciones. Así puede responder, resumir o redactar, y también sonar convincente sin tener razón. No lo vamos a entrenar: usaremos uno pequeño que ya viene entrenado y conversaremos con él.</p>
+<h2 id="s3">3. Ejemplo A: clasificación con una tabla</h2>
+<p>Usaremos el dataset <strong>Breast Cancer Wisconsin</strong>, uno de los ejemplos clásicos de la biblioteca <a href="https://scikit-learn.org/">scikit-learn</a> (<a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">documentación del dataset</a>): 569 filas, una por cada tumor de mama analizado. Cada fila tiene 30 columnas numéricas con medidas del núcleo de las células (radio, textura, perímetro, área, etc.), calculadas a partir de una imagen de una muestra tomada con una aguja delgada. La última columna, <strong>diagnosis</strong>, tiene dos categorías, <em>malignant</em> (maligno) y <em>benign</em> (benigno), y es la que el modelo intentará predecir.</p>
+<div role="note" style="background:#fff4dc;color:#1a1a1a;border-left:6px solid #c98a00;padding:10px 16px;border-radius:6px;margin:8px 0"><b>Es solo un ejercicio</b><br>Los datos son reales, pero este ejemplo es para aprender cómo funciona la clasificación. Los modelos que entrenes aquí no sirven para diagnosticar a nadie.</div>
+<p>Este dataset no viene incluido en DashAI, así que primero lo generaremos en Colab, lo descargaremos en tu computador y lo subiremos a DashAI.</p>
+<p>Si la pantalla de DashAI aparece en inglés, busca el selector de idioma (arriba a la derecha) y elige <strong>Español</strong>: los nombres de botones que usamos aquí vienen de esa versión. Algunas etiquetas, como <em>Input Columns</em> y los nombres de las métricas (<em>Accuracy</em>, <em>Recall</em>), aparecen en inglés aunque elijas español.</p>
+<h3>A.1 Obtener y subir el conjunto de datos</h3>
+<p>En el cuaderno de Colab, ejecuta la celda del <strong>Paso 5</strong> (sección 3). Genera el archivo <code>breast_cancer.csv</code> y el navegador lo descarga a tu computador. Después, en el recuadro de DashAI:</p>
+<ol>
+<li>En el menú superior, haz clic en <strong>Datasets</strong> y luego en la tarjeta <strong>Dataset</strong> (&quot;Importa tus datos desde varias fuentes y formatos&quot;).</li>
+<li>Elige <strong>Cargador de Datos CSV</strong> (en inglés, <em>dataloader</em>: la parte de DashAI que sabe leer cada tipo de archivo) y haz clic en <strong>Siguiente</strong>.</li>
+<li>Escribe <code>breast_cancer</code> en <strong>Nombre del Dataset</strong>, haz clic en <strong>Subir un archivo</strong> (o arrastra el archivo) y elige <code>breast_cancer.csv</code>. Espera a que aparezca la vista previa.</li>
+<li>Haz clic en <strong>Subir</strong>.</li>
+<li>Al terminar, DashAI abre el dataset: 569 filas, 31 columnas, un resumen de calidad y la vista previa. Si aparece un tutorial, ciérralo con <strong>Saltar tutorial</strong>.</li>
+</ol>
+<h3>A.2 Explorar los datos (opcional)</h3>
+<p>Antes de entrenar conviene mirar los datos. Las 30 columnas son 10 medidas del núcleo celular (radio, textura, perímetro, área, suavidad, compacidad, concavidad, puntos cóncavos, simetría y dimensión fractal), cada una en tres versiones: promedio (<code>mean</code>), error estándar (<code>error</code>) y peor valor (<code>worst</code>, el promedio de los tres valores más grandes). La pregunta es: ¿se distinguen los tumores malignos de los benignos por su radio?</p>
+<ol>
+<li>En la página del dataset, haz clic en <strong>Nuevo cuaderno</strong>. (Aquí &quot;cuaderno&quot; es el espacio de análisis de DashAI; no es el cuaderno de Colab.) Verifica que el dataset elegido sea <code>breast_cancer</code>, ponle un nombre, por ejemplo <code>exploracion-breast-cancer</code>, y haz clic en <strong>Crear cuaderno</strong>.</li>
+<li>En el panel <strong>Herramientas de Análisis</strong>, a la derecha, pestaña <strong>Explorar</strong>, haz clic en <strong>Histograma</strong> (está en el grupo <em>Análisis de Distribución</em>).</li>
+<li>En el paso 1, <em>Configurar Alcance</em>, marca la fila <code>mean radius</code> y haz clic en <strong>Siguiente</strong>.</li>
+<li>En el paso 2, <em>Configurar Parámetros</em>:
+<ul>
+<li>En <strong>Normalización</strong>, elige <strong>Porcentaje</strong>. El campo es obligatorio y la opción <em>Cuenta</em> no deja continuar.</li>
+<li>En <strong>Columna para grupo de color</strong>, elige <strong>String</strong> y escribe <code>diagnosis</code>.</li>
+</ul>
+</li>
+<li>Haz clic en <strong>Crear explorador</strong>.</li>
+</ol>
+<p>Verás un histograma de <code>mean radius</code> con un color para cada diagnóstico (la leyenda dice cuál es cuál). Los tumores benignos se concentran en radios pequeños y los malignos se desplazan hacia radios grandes. Esa diferencia es la que un modelo puede aprovechar para separarlos. En la zona intermedia los dos grupos se mezclan, y ahí es donde suele equivocarse más. Si quieres, repite con otras columnas, como <code>worst area</code> o <code>mean fractal dimension</code>, y compara cuáles separan mejor.</p>
+<h3>A.3 Crear una sesión de entrenamiento</h3>
+<p>(Aquí &quot;sesión&quot; es el espacio de trabajo de DashAI para un problema; no tiene que ver con la sesión de Colab.)</p>
+<ol>
+<li>En el menú superior, haz clic en <strong>Modelos</strong> y, en las tarjetas de tareas, en <strong>Clasificación Tabular</strong>.</li>
+<li>Escribe un nombre en <strong>Nombre de la Sesión</strong>, por ejemplo <code>prueba-breast-cancer</code>, y en <strong>Seleccionar un dataset</strong> elige <code>breast_cancer</code>.</li>
+<li>Revisa las columnas. <strong>Input Columns</strong> son las características que el modelo mirará (las 30 medidas) y <strong>Output Columns</strong> es la que queremos predecir (<code>diagnosis</code>). DashAI las propone automáticamente: revisa que sean esas.</li>
+<li>En el panel de la derecha, <em>Configurar Sesión</em>, deja la estrategia <strong>Holdout</strong> con partición <strong>Aleatorio</strong>. Así los datos se reparten en 60 % para entrenamiento, 20 % para validación y 20 % para prueba.</li>
+<li>Si el aviso de las columnas sale en verde, haz clic en <strong>Crear sesión</strong>. Si sale en rojo, lee el mensaje: casi siempre falta elegir una columna de entrada o de salida.</li>
+</ol>
+<h3>A.4 Entrenar modelos</h3>
+<p>Vamos a comparar tres modelos. Los nombres en negrita son los que se usan en la literatura; en DashAI los verás en español, que es el que va entre paréntesis:</p>
+<ul>
+<li><strong>Dummy Classifier</strong> (<em>Clasificador Dummy</em>): no usa las medidas de cada caso y responde siempre la categoría más frecuente. En este dataset, 357 de 569 casos son <em>benign</em>, así que acierta cerca de un 63 % sin aprender nada. Sirve como punto de comparación: un modelo que valga la pena tiene que superarlo.</li>
+<li><strong>Logistic Regression</strong> (<em>Regresión Logística</em>): a pesar del nombre, clasifica. Combina las medidas con un peso para cada una y calcula qué tan probable es cada categoría, trazando una frontera simple entre las dos. Es rápido y fácil de explicar.</li>
+<li><strong>Random Forest</strong> (<em>Bosque Aleatorio</em>): crea muchos árboles de decisión, cada uno con una serie de preguntas del tipo &quot;¿el radio es mayor que 15?&quot;, y deja que voten. Capta relaciones más complejas, pero es más difícil de explicar.</li>
+</ul>
+<ol>
+<li>Dentro de la sesión, en el panel <strong>Modelos Disponibles</strong> de la derecha, haz clic en <strong>Clasificador Dummy</strong>. En la ventana <em>Agregar Modelo a la Sesión</em>, deja el nombre propuesto y haz clic en <strong>Agregar Modelo</strong>.</li>
+<li>Repite con <strong>Regresión Logística</strong> y <strong>Bosque Aleatorio</strong>. Si DashAI abre la página del modelo recién agregado, vuelve a la sesión desde la ruta de arriba (<em>Modelos / prueba-breast-cancer</em>).</li>
+<li>En la sesión, haz clic en <strong>Ejecutar todo</strong>. Con estos modelos y 569 filas termina en pocos segundos.</li>
+</ol>
+<h3>A.5 Ver resultados</h3>
+<ol>
+<li>En la misma sesión, baja hasta <strong>Comparación de Modelos</strong>. Tiene tres pestañas: <strong>Entrenamiento</strong>, <strong>Validación</strong> y <strong>Prueba</strong>. Elige <strong>Prueba</strong>: son filas que el modelo nunca vio.</li>
+<li>Busca la columna <strong>Accuracy</strong> (exactitud), que es el porcentaje de casos bien clasificados, y compara los modelos. La estrella (★) marca el mejor valor de cada columna. Con este dataset, la Regresión Logística y el Bosque Aleatorio suelen acertar entre un 93 % y un 98 % en prueba, muy por encima del Dummy (cerca de 63 %). Si tu resultado está lejos de eso, revisa que la columna de salida sea <code>diagnosis</code>.</li>
+<li>Con pocas filas, esta cifra cambia según cómo se repartan los datos. Si tus números difieren de los de otra persona, es normal.</li>
+<li>Si un modelo sale muy bien en entrenamiento y bastante peor en prueba, es señal de que se ajustó demasiado a los ejemplos con que aprendió (se llama <em>sobreajuste</em>).</li>
+<li>En un problema médico, no todos los errores pesan igual. Tomamos <em>malignant</em> como el resultado positivo, el que queremos detectar. Entonces el <strong>error tipo I</strong> (falso positivo) es decir &quot;maligno&quot; a un tumor benigno, y el <strong>error tipo II</strong> (falso negativo) es decir &quot;benigno&quot; a un tumor maligno, o sea, no detectarlo. Aquí el error tipo II es el más grave. Por eso, además de <em>Accuracy</em>, mira <strong>Recall</strong>: de todos los tumores malignos, qué fracción detectó el modelo. Equivale a 1 menos la tasa de error tipo II. El Dummy tiene 0, porque nunca responde <em>malignant</em> y comete error tipo II con todos los malignos.</li>
+</ol>
+<h3>A.6 Hacer una predicción</h3>
+<ol>
+<li>Haz clic en uno de los modelos de la sesión, por ejemplo <strong>Regresión Logística</strong>, y luego en la pestaña <strong>Predicciones</strong> y en <strong>Predicciones Manuales</strong>.</li>
+<li>Haz clic en <strong>Agregar fila</strong>. DashAI agrega una fila ya llena con los valores de un caso del dataset. Puedes cambiar cualquier valor haciendo clic en su celda; desplázate a la derecha para ver las 30 columnas.</li>
+<li>Haz clic en <strong>Ejecutar predicción</strong>. Aparece el aviso &quot;Predicción completada exitosamente&quot;.</li>
+<li>Para leer el resultado, mira la última columna, <strong>diagnosis</strong>, marcada como <em>Predicción</em>. Muestra la categoría que el modelo eligió, <code>malignant</code> o <code>benign</code>. Es la categoría que el modelo estima, no un hecho: puede equivocarse, y esta tabla no muestra qué tan seguro está.</li>
+<li>Para probar otro caso, agrega otra fila. Si quieres que la predicción cambie, modifica varios valores a la vez (por ejemplo, el radio, el perímetro y el área juntos): cambiar una sola columna rara vez basta.</li>
+</ol>
+<h3>A.7 Qué te llevas y qué sigue</h3>
+<p>Con este ejercicio practicaste cuatro ideas que sirven en la mayoría de los problemas de clasificación:</p>
+<ul>
+<li><strong>Mirar los datos antes de entrenar</strong>, para saber si hay algo que aprender (A.2).</li>
+<li><strong>Comparar el modelo con una base simple</strong>, como el Dummy Classifier, para saber si un modelo aporta algo.</li>
+<li><strong>Evaluar con datos que el modelo no vio</strong>, es decir, mirar la pestaña <em>Prueba</em> y no la de <em>Entrenamiento</em>.</li>
+<li><strong>Pensar qué error pesa más</strong>: aquí, el error tipo II (no detectar un tumor maligno).</li>
+</ul>
+<p>Para seguir practicando, agrega otros modelos de la lista, como <strong>Decision Tree</strong> (<em>Árbol de Decisión</em>), <strong>K-Nearest Neighbors (KNN)</strong> (<em>K-Vecinos más Cercanos</em>) o <strong>Support Vector Machine (SVM)</strong> (<em>Máquina de Vectores de Soporte</em>), y ve si alguno supera a la Regresión Logística y al Bosque Aleatorio. Si algo sale mal, crea otra sesión y vuelve a intentarlo.</p>
+<p>Fuente de los datos: Wolberg, W. H., Street, W. N. y Mangasarian, O. L. <em>Breast Cancer Wisconsin (Diagnostic)</em>, UCI Machine Learning Repository, <a href="https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic">https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic</a>. La copia que usamos es la que incluye scikit-learn.</p>
+<h2 id="s4">4. Ejemplo B: generación de texto con un modelo de lenguaje</h2>
+<p>Aquí conversaremos con un modelo de lenguaje. La primera vez, DashAI debe descargarlo desde internet.</p>
+<h3>Qué es Text to Text</h3>
+<p>En DashAI, <strong>Text to Text</strong> (<em>Texto a Texto</em>) es la tarea en que el modelo recibe un texto y responde con otro texto. El texto de entrada es tu mensaje, que puede incluir un documento pegado, y la respuesta puede ser un resumen, una reescritura, una traducción o la respuesta a una pregunta. No es clasificación: no hay categorías fijas, porque el modelo escribe la respuesta pieza por pieza (cada pieza es un <em>token</em>). A este tipo de modelos se les llama <em>generativos</em>.</p>
+<h3>B.1 Crear la sesión</h3>
+<ol>
+<li>En el menú superior, haz clic en <strong>Generativo</strong> y luego en la tarjeta <strong>Crear una nueva sesión</strong>.</li>
+<li>En <em>Seleccionar Modelo</em>, filtra por <strong>Texto a Texto (12)</strong> y haz clic en el modelo que quieras usar. El número del nombre (1.5B) indica cuántos parámetros tiene el modelo, es decir, cuántas cifras ajustó al entrenarse: 1.500 millones. Mientras más grande, mejor responde pero más pesa.
+<ul>
+<li><strong>Qwen2.5 1.5B Instruct</strong> (<a href="https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct">ficha del modelo</a>, 1,8 GB): el recomendado para los ejercicios de abajo. Responde bien en español y funciona también sin GPU, aunque más lento (un minuto o más por respuesta larga).</li>
+<li><strong>SmolLM2 360M Instruct</strong> (<a href="https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct">ficha del modelo</a>, 369 MB): el más liviano. Sirve para probar el flujo, pero en español se equivoca con frecuencia, mezcla idiomas e inventa datos.</li>
+</ul>
+</li>
+<li>Haz clic en el botón con el tamaño del modelo (por ejemplo, <strong>1.8 GB</strong>) para descargarlo. La tarjeta dirá <em>Descargando…</em> y puede demorar unos minutos. Cuando termine, se habilita <strong>Siguiente</strong>.</li>
+<li>Haz clic en <strong>Siguiente</strong> y luego en <strong>Crear una sesión</strong>.</li>
+</ol>
+<h3>B.2 Ajustar los parámetros</h3>
+<p>En el panel <strong>Parámetros del Modelo</strong>, a la derecha, cambia estos dos valores y haz clic en <strong>Actualizar</strong>. DashAI no conserva los valores que fijas al crear la sesión, así que cámbialos aquí, ya dentro de ella:</p>
+<ul>
+<li><strong>Tokens máximos</strong>: el largo máximo de cada respuesta. Viene en 100, que es poco. Pon 400. Un token es un fragmento de palabra: en español, 1 token equivale a algo más de media palabra.</li>
+<li><strong>Ventana de contexto</strong>: el límite total de tokens, contando tu mensaje, el historial de la conversación y la respuesta. Viene en 512, y un documento de 400 palabras no cabe. Pon 8192.</li>
+</ul>
+<h3>B.3 Conversar</h3>
+<ol>
+<li>
+<p>Cuando el modelo esté listo, escribe en el chat. Por ejemplo, puedes copiar y pegar este mensaje:</p>
+<p><code>Explica con palabras simples qué es el aprendizaje automático.</code></p>
+</li>
+<li>
+<p><strong>Resumir un documento.</strong> Abre esta noticia de <a href="https://www.biobiochile.cl/">Radio Bío Bío</a>, copia el título y el texto. En el chat, escribe esta instrucción y, debajo, pega la noticia:</p>
+<p><code>Resume en 3 o 4 frases, en español, la siguiente noticia:</code></p>
+<ul>
+<li><a href="https://www.biobiochile.cl/noticias/ciencia-y-tecnologia/astronomia/2026/07/06/un-telescopio-en-chile-descubrio-que-el-cometa-interestelar-3i-atlas-seria-mas-antiguo-que-el-sol.shtml">Un telescopio en Chile descubrió que el cometa interestelar 3I/ATLAS sería más antiguo que el Sol</a> (6 de julio de 2026).</li>
+</ul>
+</li>
+<li>
+<p><strong>Sintetizar varios documentos.</strong> Abre estas tres noticias sobre el mismo cometa, copia el texto de cada una y pégalas en un solo mensaje, escribiendo &quot;Noticia 1:&quot;, &quot;Noticia 2:&quot; y &quot;Noticia 3:&quot; antes de cada una. Al principio, escribe:</p>
+<p><code>Lee estas tres noticias sobre el mismo tema y escribe una síntesis en un solo párrafo, en español: qué tienen en común y qué aporta cada una.</code></p>
+<ul>
+<li><a href="https://www.biobiochile.cl/noticias/ciencia-y-tecnologia/astronomia/2025/09/12/descubren-desde-chile-un-sorprendente-detalle-del-cometa-3i-atlas-es-diferente-a-cualquier-otro.shtml">Descubren desde Chile un sorprendente detalle del cometa 3I/ATLAS</a> (12 de septiembre de 2025).</li>
+<li><a href="https://www.biobiochile.cl/noticias/ciencia-y-tecnologia/astronomia/2026/04/23/descubren-desde-chile-prometedoras-pistas-sobre-como-se-formo-el-cometa-interestelar-3i-atlas.shtml">Descubren desde Chile prometedoras pistas sobre cómo se formó el cometa interestelar 3I/ATLAS</a> (23 de abril de 2026).</li>
+<li>La noticia del punto anterior (6 de julio de 2026).</li>
+</ul>
+</li>
+<li>
+<p>Prueba otras tareas: reescribir un texto para que sea más claro o proponer un título.</p>
+</li>
+<li>
+<p>Antes de confiar en la respuesta:</p>
+<ul>
+<li>El modelo no abre enlaces: hay que pegar el texto, no la dirección.</li>
+<li>Tres noticias suman unas 1.600 palabras y el modelo tarda en responder. El historial también ocupa contexto, así que para probar otros documentos crea una sesión nueva.</li>
+<li>Prueba el mismo texto con los dos modelos y compara. En las pruebas que hicimos para esta guía, SmolLM2 360M respondió en inglés e inventó una cita que no está en las noticias. Verifica siempre la respuesta con el texto original.</li>
+<li>Estas noticias son de Radio Bío Bío y pertenecen a sus autores. Si los enlaces dejan de funcionar, usa otra noticia de su sección de ciencia y tecnología.</li>
+</ul>
+</li>
+</ol>
+<div role="note" style="background:#fff4dc;color:#1a1a1a;border-left:6px solid #c98a00;padding:10px 16px;border-radius:6px;margin:8px 0"><b>Estos modelos se equivocan</b><br>Los modelos pequeños inventan datos con total seguridad, incluidos datos médicos. Sirven para practicar y para tareas de redacción, pero <b>no uses sus respuestas para decisiones clínicas</b> ni las cites sin verificarlas.</div>
+<h2 id="s5">5. Si algo no funciona</h2>
+<p><strong>DashAI no abre, el recuadro está en blanco o se apagó.</strong> Eso se resuelve en el cuaderno de Colab, sección 5 (<em>Si algo no funciona</em>). Después de repetir el Paso 3 y el Paso 4, tu trabajo sigue ahí si habías marcado <strong>guardar_en_drive</strong>.</p>
+<h3>Ejemplo A</h3>
+<p><strong>DashAI rechaza el archivo al subirlo.</strong> Revisa que elegiste el cargador de CSV y que el archivo es <code>breast_cancer.csv</code> tal como se descargó, sin abrirlo ni guardarlo desde otro programa.</p>
+<p><strong>Si el archivo no se descargó,</strong> vuelve a ejecutar el Paso 5 del cuaderno.</p>
+<h3>Ejemplo B</h3>
+<p><strong>El botón Siguiente no se habilita.</strong> Falta descargar el modelo: haz clic en el botón con su tamaño y espera a que termine.</p>
+<p><strong>La respuesta se corta o el modelo falla con un texto largo.</strong> Revisa en el panel de parámetros que <strong>Tokens máximos</strong> y <strong>Ventana de contexto</strong> tengan los valores del paso B.2 y que hayas hecho clic en <strong>Actualizar</strong>.</p>
+<h2 id="s6">6. Glosario</h2>
+<ul>
+<li><strong>Accuracy (exactitud):</strong> porcentaje de casos que el modelo clasifica bien.</li>
+<li><strong>Aprendizaje supervisado:</strong> aprendizaje con ejemplos que traen la respuesta correcta.</li>
+<li><strong>Característica (<em>feature</em>):</strong> cada columna que el modelo usa como entrada, por ejemplo <code>mean radius</code>.</li>
+<li><strong>Celda:</strong> bloque de código de un cuaderno de Colab, que se ejecuta con el botón ▶.</li>
+<li><strong>Clasificación:</strong> tarea en que la respuesta es una categoría, como <em>malignant</em> o <em>benign</em>.</li>
+<li><strong>Dataset (conjunto de datos):</strong> tabla con una fila por caso y una columna por característica.</li>
+<li><strong>Dummy Classifier:</strong> modelo que responde siempre la categoría más frecuente; sirve como punto de comparación.</li>
+<li><strong>Entrenamiento, validación y prueba:</strong> los tres grupos en que se reparten los datos. El modelo aprende con el primero, se afina con el segundo y se evalúa con el tercero.</li>
+<li><strong>Entrenar:</strong> dejar que un modelo ajuste sus patrones con los ejemplos.</li>
+<li><strong>Error tipo I y tipo II:</strong> el tipo I es un falso positivo (decir &quot;maligno&quot; a un tumor benigno) y el tipo II es un falso negativo (decir &quot;benigno&quot; a un tumor maligno). Aquí el tipo II es el más grave.</li>
+<li><strong>GPU:</strong> componente del computador que acelera mucho el trabajo de los modelos, sobre todo los de lenguaje.</li>
+<li><strong>Histograma:</strong> gráfico de barras que muestra cuántos casos caen en cada rango de valores de una columna.</li>
+<li><strong>Holdout:</strong> forma de repartir los datos en entrenamiento, validación y prueba, sin repetir filas. Aquí, 60 %, 20 % y 20 %.</li>
+<li><strong>LLM (modelo de lenguaje):</strong> modelo entrenado con enormes cantidades de texto para predecir qué fragmento sigue; se usa para conversar, resumir o redactar.</li>
+<li><strong>Logistic Regression:</strong> modelo de clasificación que combina las características con un peso cada una y calcula la probabilidad de cada categoría.</li>
+<li><strong>Modelo:</strong> el resultado de ajustar un procedimiento matemático a los ejemplos.</li>
+<li><strong>Parámetro:</strong> cifra interna que un modelo ajusta al entrenarse. El tamaño de un modelo de lenguaje se mide en parámetros (1.5B son 1.500 millones). No es lo mismo que los ajustes del panel <em>Parámetros del Modelo</em>, como Tokens máximos.</li>
+<li><strong>Predecir:</strong> usar un modelo con un caso nuevo para obtener una respuesta.</li>
+<li><strong>Random Forest:</strong> modelo que combina muchos árboles de decisión y deja que voten.</li>
+<li><strong>Recall (sensibilidad):</strong> de todos los casos de una categoría, la fracción que el modelo detectó. En este ejemplo, de todos los tumores malignos. Equivale a 1 menos la tasa de error tipo II.</li>
+<li><strong>Sesión (DashAI):</strong> espacio de trabajo de DashAI para un problema, con su dataset y sus modelos. No es la sesión de Colab.</li>
+<li><strong>Sobreajuste:</strong> cuando un modelo se ajusta tanto a los ejemplos de entrenamiento que funciona peor con datos nuevos.</li>
+<li><strong>Text to Text:</strong> tarea en que el modelo recibe un texto y responde con otro texto.</li>
+<li><strong>Token:</strong> fragmento de palabra, la unidad con que trabaja un modelo de lenguaje. En español, 1 token equivale a algo más de media palabra.</li>
+<li><strong>Tokens máximos:</strong> el largo máximo de cada respuesta de un modelo de lenguaje.</li>
+<li><strong>Ventana de contexto:</strong> el límite total de tokens que un modelo puede manejar a la vez, contando tu mensaje, el historial y la respuesta.</li>
+</ul>
+<h2 id="s7">7. Para seguir aprendiendo</h2>
+<ul>
+<li><a href="https://docs.dash-ai.com/">Documentación de DashAI</a> y <a href="https://pypi.org/project/dashai/">DashAI en PyPI</a>, para instalarlo en tu computador.</li>
+<li><a href="https://developers.google.com/machine-learning/crash-course?hl=es-419">Curso intensivo de aprendizaje automático de Google</a>, con ejercicios.</li>
+<li><a href="https://scikit-learn.org/stable/user_guide.html">Guía de usuario de scikit-learn</a>, con los modelos que usamos y muchos más.</li>
+<li><a href="https://huggingface.co/learn">Cursos de Hugging Face</a>, si te interesan los modelos de lenguaje.</li>
+</ul>
+
+</main><script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:"neutral"})}</script></body></html>

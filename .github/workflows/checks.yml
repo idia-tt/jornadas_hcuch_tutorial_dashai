@@ -1,0 +1,23 @@
+name: Calidad e instalación
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.13.6'
+          enable-cache: true
+      - run: uv sync --locked --extra llm
+      - run: uv run --extra llm pre-commit run --all-files
+      - run: uv run --extra llm python -c "import DashAI, llama_cpp, sklearn"
+      - run: uv run --extra llm python scripts/generar_datos.py
+      - run: uv run --extra llm python scripts/comprobar_dashai.py

@@ -1,0 +1,43 @@
+[project]
+name = "jornadas-hcuch-tutorial-dashai"
+version = "0.1.0"
+description = "Tutorial de DashAI para las jornadas HCUCH"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = ["dashai==0.10.0", "scikit-learn<1.8", "torch", "torchvision"]
+
+[project.optional-dependencies]
+llm = ["dashai[cpu]==0.10.0", "llama-cpp-python"]
+
+[dependency-groups]
+dev = ["pre-commit==4.7.0", "ruff==0.17.3"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+llama-cpp-python = { index = "llama-cpp-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "llama-cpp-cpu"
+url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+explicit = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "C4", "PIE", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# Colab intercala celdas de instalación e imports.
+"*.ipynb" = ["E402"]
