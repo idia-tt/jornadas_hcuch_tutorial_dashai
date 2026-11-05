@@ -1,4 +1,9 @@
-# Tutorial de DashAI — Jornadas HCUCH
+# Tutorial de DashAI — VIII Jornadas de Investigación HCUCH
+
+Este tutorial fue preparado para las
+[VIII Jornadas de Investigación](https://redhcuch.redclinica.cl/actividad-academica/viii_jornadas_de_investigacion.aspx)
+del Hospital Clínico de la Universidad de Chile, realizadas junto con la Facultad
+de Ciencias Físicas y Matemáticas.
 
 Con [DashAI](https://www.dash-ai.com/) puedes entrenar y comparar modelos de
 aprendizaje automático desde una interfaz gráfica. En este taller harás dos
