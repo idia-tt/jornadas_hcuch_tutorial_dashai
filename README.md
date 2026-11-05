@@ -1,5 +1,9 @@
 # Tutorial de DashAI — VIII Jornadas de Investigación HCUCH
 
+<p align="center">
+  <a href="https://idia.uchile.cl/"><img src="assets/logo-idia.svg" alt="IDIA — Iniciativa de Datos e Inteligencia Artificial" width="240" height="100"></a><a href="https://dcc.uchile.cl/"><img src="assets/logo-dcc.svg" alt="DCC — Departamento de Ciencias de la Computación, Universidad de Chile" width="240" height="100"></a><a href="https://www.dash-ai.com/"><img src="assets/logo-dashai.svg" alt="DashAI" width="240" height="100"></a>
+</p>
+
 Este tutorial fue preparado para las
 [VIII Jornadas de Investigación](https://redhcuch.redclinica.cl/actividad-academica/viii_jornadas_de_investigacion.aspx)
 del Hospital Clínico de la Universidad de Chile, realizadas junto con la Facultad
@@ -10,7 +14,7 @@ aprendizaje automático desde una interfaz gráfica. En este taller harás dos
 ejercicios: clasificar casos a partir de una tabla de datos y conversar con un
 modelo de lenguaje para generar texto. No necesitas haber usado DashAI antes.
 
-Material preparado por [Pablo Badilla](https://www.linkedin.com/in/pablo-badilla-torrealba/),
+Material preparado por [Pablo Badilla](https://github.com/pbadillatorrealba),
 de la [Iniciativa de Datos e Inteligencia Artificial (IDIA)](https://idia.uchile.cl/),
 [Facultad de Ciencias Físicas y Matemáticas (FCFM)](https://ingenieria.uchile.cl/),
 [Universidad de Chile](https://uchile.cl/).
@@ -160,6 +164,26 @@ El primer ejercicio usa el conjunto público *Breast Cancer Wisconsin*, incluido
 en scikit-learn. Para practicar, usa esos datos y evita subir información que
 identifique a pacientes. Los archivos generados, los modelos descargados y las
 sesiones locales quedan fuera de Git.
+
+## Generar las guías HTML
+
+El contenido de la guía de ejercicios se edita en [DashAI_Guia.md](DashAI_Guia.md).
+Las instrucciones locales se editan en [docs/dashai-local.md](docs/dashai-local.md).
+Después de cambiar cualquiera de ellas, genera los dos HTML:
+
+```sh
+uv run --extra llm python scripts/generar_html.py
+```
+
+El comando crea `DashAI_Guia.html` y `DashAI_Local.html` en la raíz del repositorio.
+Puedes abrirlos con doble clic en tu navegador. Los logos y estilos van incluidos
+en cada HTML; los diagramas de la guía necesitan internet para cargar Mermaid.
+No edites los HTML a mano: guarda los cambios en el Markdown y vuelve a generarlos.
+La presentación común se ajusta en `docs/plantilla.html`.
+
+También puedes [descargar las instrucciones locales en HTML](https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai/raw/refs/heads/main/DashAI_Local.html).
+Para comprobar que ambos HTML están actualizados, usa
+`uv run --extra llm python scripts/generar_html.py --check`.
 
 ## Si vas a modificar el material
 

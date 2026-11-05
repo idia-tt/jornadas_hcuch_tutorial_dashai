@@ -18,6 +18,8 @@ jobs:
           enable-cache: true
       - run: uv sync --locked --extra llm
       - run: uv run --extra llm pre-commit run --all-files
+      - run: uv run --extra llm python scripts/generar_html.py --check
+      - run: uv run --extra llm python -m unittest discover -s tests
       - run: uv run --extra llm python -c "import DashAI, llama_cpp, sklearn"
       - run: uv run --extra llm python scripts/generar_datos.py
       - run: uv run --extra llm python scripts/comprobar_dashai.py

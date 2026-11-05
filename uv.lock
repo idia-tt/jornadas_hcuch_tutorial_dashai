@@ -1423,6 +1423,7 @@ llm = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "markdown-it-py" },
     { name = "pre-commit" },
     { name = "ruff" },
 ]
@@ -1440,6 +1441,7 @@ provides-extras = ["llm"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "markdown-it-py", specifier = "==4.2.0" },
     { name = "pre-commit", specifier = "==4.7.0" },
     { name = "ruff", specifier = "==0.17.3" },
 ]
