@@ -21,9 +21,12 @@ de la [Iniciativa de Datos e Inteligencia Artificial (IDIA)](https://idia.uchile
 
 ## Empezar con Google Colab
 
-Si es tu primera vez, usa esta opción. Solo necesitas una cuenta de Google y un
-navegador. DashAI se ejecutará en un computador de Google: no tienes que instalar
-programas en el tuyo.
+> [!TIP]
+> Si es tu primera vez, empieza por [el cuaderno en Google Colab](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb).
+> Solo necesitas una cuenta de Google y un navegador; no tienes que instalar
+> programas en tu computador.
+
+DashAI se ejecutará en un computador de Google.
 
 1. **Descarga la [guía de ejercicios](https://github.com/idia-tt/jornadas_hcuch_tutorial_dashai/raw/refs/heads/main/DashAI_Guia.html)**
    y abre el archivo `DashAI_Guia.html` en tu navegador. Esta guía explica qué hacer
@@ -40,6 +43,11 @@ programas en el tuyo.
 La preparación puede demorar entre 10 y 20 minutos la primera vez. Calcula unos
 20 minutos más por ejercicio. Si una celda falla, consulta la sección **5. Si algo
 no funciona** del cuaderno.
+
+> [!IMPORTANT]
+> En [el cuaderno de Colab](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb), marca **guardar_en_drive**
+> antes de encender DashAI si quieres conservar tus sesiones. Si lo ejecutas
+> en tu computador, conserva la carpeta `.dashai`.
 
 ## Ejecutarlo en tu computador
 
@@ -161,9 +169,12 @@ y una alternativa para instalar solo lo necesario para clasificación.
 ## Sobre los datos
 
 El primer ejercicio usa el conjunto público *Breast Cancer Wisconsin*, incluido
-en scikit-learn. Para practicar, usa esos datos y evita subir información que
-identifique a pacientes. Los archivos generados, los modelos descargados y las
-sesiones locales quedan fuera de Git.
+en scikit-learn. Los archivos generados, los modelos descargados y las sesiones
+locales quedan fuera de Git.
+
+> [!WARNING]
+> Usa los datos de ejemplo para practicar. No subas información que identifique
+> a pacientes. Los modelos de este tutorial no sirven para tomar decisiones clínicas.
 
 ## Generar las guías HTML
 
@@ -211,6 +222,7 @@ macOS con Apple Silicon. La aceleración GPU requiere pruebas en hardware real.
 
 ## Enlaces
 
+- **Google Colab:** [abrir el cuaderno del tutorial](https://colab.research.google.com/github/idia-tt/jornadas_hcuch_tutorial_dashai/blob/main/DashAI_Colab.ipynb).
 - **DashAI:** [sitio web](https://www.dash-ai.com/),
   [documentación](https://docs.dash-ai.com/) y
   [código fuente](https://github.com/DashAISoftware/DashAI).
