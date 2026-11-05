@@ -1,7 +1,7 @@
 # Tutorial de DashAI — VIII Jornadas de Investigación HCUCH
 
 <p align="center">
-  <a href="https://idia.uchile.cl/"><img src="assets/logo-idia.svg" alt="IDIA — Iniciativa de Datos e Inteligencia Artificial" width="240" height="100"></a><a href="https://dcc.uchile.cl/"><img src="assets/logo-dcc.svg" alt="DCC — Departamento de Ciencias de la Computación, Universidad de Chile" width="240" height="100"></a><a href="https://www.dash-ai.com/"><img src="assets/logo-dashai.svg" alt="DashAI" width="240" height="100"></a>
+  <a href="https://idia.uchile.cl/"><img src="assets/logo-idia.svg" alt="IDIA — Iniciativa de Datos e Inteligencia Artificial" width="33.33%"></a><a href="https://dcc.uchile.cl/"><img src="assets/logo-dcc.svg" alt="DCC — Departamento de Ciencias de la Computación, Universidad de Chile" width="33.34%"></a><a href="https://www.dash-ai.com/"><img src="assets/logo-dashai.svg" alt="DashAI" width="33.33%"></a>
 </p>
 
 Este tutorial fue preparado para las
