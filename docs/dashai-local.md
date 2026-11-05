@@ -26,6 +26,9 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+Después de reiniciar la terminal, en Windows ejecuta también `$env:PYTHONUTF8 = "1"` en la terminal donde
+iniciarás DashAI. Evita errores Unicode del banner al redirigir los registros.
+
 Cierra y vuelve a abrir la terminal. Comprueba `git --version` y `uv --version`.
 Los comandos siguientes funcionan en ambos tipos de terminal, sin activar un
 entorno ni cambiar políticas de ejecución de PowerShell.

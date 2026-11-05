@@ -15,7 +15,7 @@ from pathlib import Path
 def main():
     with (
         tempfile.TemporaryDirectory() as carpeta,
-        Path(carpeta, "servidor.log").open("w+") as registro,
+        Path(carpeta, "servidor.log").open("w+", encoding="utf-8") as registro,
     ):
         proceso = subprocess.Popen(
             [
@@ -28,6 +28,7 @@ def main():
             ],
             stdout=registro,
             stderr=subprocess.STDOUT,
+            env={**os.environ, "PYTHONUTF8": "1"},
             start_new_session=os.name != "nt",
         )
         try:
